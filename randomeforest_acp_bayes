@@ -1,12 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May  5 16:01:39 2022
+
+@author: Jonathan
+"""
+from sklearn.model_selection import train_test_split  
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.ensemble import RandomForestClassifier
 
-
-df = pd.read_csv(r'C:\Users\Jonathan\Desktop\csv.csv')
+df = pd.read_csv('dataset.csv')
 
 def ohe_conversion(df):
     ohe=pd.DataFrame()
@@ -19,251 +26,39 @@ def ohe_conversion(df):
     return ohe.fillna(int(0))
 
 
-
-df = pd.read_csv(r'C:\Users\Jonathan\Desktop\dataset.csv')
-
-
-
-
 df = ohe_conversion(df)
 x = df.drop('Disease',axis=1).values
 y = df['Disease'].values
 newframe = df.copy()
 
 
-
-
-from sklearn.model_selection import train_test_split  
-x_train, x_test, y_train, y_test= train_test_split(x, y, test_size= 0.25, random_state=0)  
-
-
-
-
-#feature Scaling  
-from sklearn.preprocessing import StandardScaler    
-st_x= StandardScaler()    
-x_train= st_x.fit_transform(x_train)    
-x_test= st_x.transform(x_test)  
-
-
-
-
-# Splitting the data into train and test
-X_train, X_test, y_train, y_test = train_test_split(x, y, train_size=0.7, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(x, y, train_size=0.5, random_state=42)
 X_train.shape, X_test.shape
 
 
-# In[27]:
 
-
-from sklearn.ensemble import RandomForestClassifier
-
-
-# In[28]:
-
-
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=5,
+classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=10,
                                        n_estimators=100, oob_score=True)
 
 
-# In[29]:
-
-
 classifier_rf.fit(X_train, y_train)
+u1 = classifier_rf.oob_score_
+print(u1)
 
+scaler = StandardScaler()
 
-# In[30]:
+scaler.fit(x)
 
-
-# checking the oob score
-classifier_rf.oob_score_
-
-
-# In[31]:
-
-
-mypca = PCA(n_components=3) # On paramètre ici pour ne garder que 3 composantes
-
-# Modèle d'ACP
-
-mypca.fit(x)
-
-#Pourcentage de la variance expliquée par chacune des composantes sélectionnées.
-
-print(mypca.singular_values_)
-
-
-# In[32]:
-
-
-data_sortie= mypca.fit_transform(x)
-print(data_sortie)
-
-
-# In[33]:
-
-
-classifier_rf.oob_score_
-
-
-# In[34]:
-
-
-mypca = PCA(n_components=43) # On paramètre ici pour ne garder que 3 composantes
-
-# Modèle d'ACP
-
-mypca.fit(x)
-
-#Pourcentage de la variance expliquée par chacune des composantes sélectionnées.
-
-print(mypca.singular_values_)
-data_sortie= mypca.fit_transform(x)
-print(data_sortie)
-classifier_rf.oob_score_
-
-
-# In[35]:
-
-
-classifier_rf.fit(X_train, y_train)
-classifier_rf.oob_score_
-
-
-# In[36]:
-
-
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=15,
-                                       n_estimators=100, oob_score=True)
-
-
-# In[37]:
-
-
-classifier_rf.fit(X_train, y_train)
-classifier_rf.oob_score_
-
-
-# In[42]:
-
-
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=17,
-                                       n_estimators=100, oob_score=True)
-classifier_rf.fit(X_train, y_train)
-classifier_rf.oob_score_
-
-
-# In[46]:
-
-
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=1,
-                                       n_estimators=100, oob_score=True)
-classifier_rf.fit(X_train, y_train)
-classifier_rf.oob_score_
-
-
-# In[48]:
-
+x=scaler.transform(x)
 
 mypca = PCA(n_components=1) # On paramètre ici pour ne garder que 3 composantes
 
-# Modèle d'ACP
-
 mypca.fit(x)
 
-#Pourcentage de la variance expliquée par chacune des composantes sélectionnées.
-
-print(mypca.singular_values_)
-data_sortie= mypca.fit_transform(x)
-print(data_sortie)
-classifier_rf.oob_score_
-
-
-# In[49]:
-
-
-mypca = PCA(n_components=43) # On paramètre ici pour ne garder que 3 composantes
-
-# Modèle d'ACP
-
-mypca.fit(x)
-
-classifier_rf.oob_score_
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=17,
+classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=10,
                                        n_estimators=100, oob_score=True)
-classifier_rf.fit(X_train, y_train)
-classifier_rf.oob_score_
 
 
-# In[66]:
-
-
-mypca = PCA(n_components=4) # On paramètre ici pour ne garder que 3 composantes
-
-# Modèle d'ACP
-
-mypca.fit(x)
-
-u1 = classifier_rf.oob_score_
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=1,
-                                       n_estimators=100, oob_score=True)
 classifier_rf.fit(X_train, y_train)
 u2 = classifier_rf.oob_score_
-print(u1)
 print(u2)
-
-
-# In[69]:
-
-
-mypca = PCA(n_components=4) # On paramètre ici pour ne garder que 3 composantes
-
-# Modèle d'ACP
-
-mypca.fit(x)
-
-u1 = classifier_rf.oob_score_
-classifier_rf = RandomForestClassifier(random_state=42, n_jobs=-1, max_depth=1,
-                                       n_estimators=100, oob_score=True)
-classifier_rf.fit(X_train, y_train)
-u2 = classifier_rf.oob_score_
-print(u1)
-print(u2)
-
-
-# In[70]:
-
-
-def pareto(data) :
-
-    from matplotlib.ticker import PercentFormatter
-
-    import numpy as np
-
-    y = list(data)
-
-    x = range(len(data))
-
-    ycum = np.cumsum(y)/sum(y)*100
-
-    fig, ax = plt.subplots()
-
-    ax.bar(x,y,color="yellow")
-
-    ax2 = ax.twinx()
-
-    ax2.plot(x,ycum, color="C1", marker="D", ms=7)
-
-    ax2.axhline(y=80,color="r")
-
-    ax2.yaxis.set_major_formatter(PercentFormatter())
-
-    ax.tick_params(axis="y", colors="C0")
-
-    ax2.tick_params(axis="y", colors="C1")
-
-    plt.ylim(0,110)
-
-    plt.show()
-    
-pareto(mypca.explained_variance_ratio_)
