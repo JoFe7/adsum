@@ -51,7 +51,7 @@ scaler.fit(x)
 
 x=scaler.transform(x)
 
-mypca = PCA(n_components=1) # On paramètre ici pour ne garder que 3 composantes
+mypca = PCA(n_components=4) # On paramètre ici pour ne garder que 4 composantes
 
 mypca.fit(x)
 
